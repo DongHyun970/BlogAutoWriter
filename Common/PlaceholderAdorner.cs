@@ -3,39 +3,45 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Controls;
 
-public class PlaceholderAdorner : Adorner
+
+namespace BlogAutoWriter.Common
 {
-    private readonly TextBlock _textBlock;
-
-    public PlaceholderAdorner(UIElement element, string placeholder)
-        : base(element)
+    public class PlaceholderAdorner : Adorner
     {
-        IsHitTestVisible = false;
+        private readonly TextBlock _textBlock;
 
-        _textBlock = new TextBlock
+        public PlaceholderAdorner(UIElement element, string placeholder)
+            : base(element)
         {
-            Text = placeholder,
-            Foreground = Brushes.Gray,
-            Margin = new Thickness(5, 0, 0, 0),
-            VerticalAlignment = VerticalAlignment.Center
-        };
+            IsHitTestVisible = false;
 
-        AddVisualChild(_textBlock);
-    }
+            _textBlock = new TextBlock
+            {
+                Text = placeholder,
+                Foreground = Brushes.Gray,
+                FontSize = 12,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(6, 0, 0, 0) // ← 텍스트박스 내부 여백과 맞춤
+            };
 
-    protected override int VisualChildrenCount => 1;
 
-    protected override Visual GetVisualChild(int index) => _textBlock;
+            AddVisualChild(_textBlock);
+        }
 
-    protected override Size MeasureOverride(Size constraint)
-    {
-        _textBlock.Measure(constraint);
-        return constraint;
-    }
+        protected override int VisualChildrenCount => 1;
 
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        _textBlock.Arrange(new Rect(finalSize));
-        return finalSize;
+        protected override Visual GetVisualChild(int index) => _textBlock;
+
+        protected override Size MeasureOverride(Size constraint)
+        {
+            _textBlock.Measure(constraint);
+            return constraint;
+        }
+
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            _textBlock.Arrange(new Rect(finalSize));
+            return finalSize;
+        }
     }
 }

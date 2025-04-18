@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using BlogAutoWriter.Views;
 using System;
 using System.Diagnostics;
 using System.Windows;
