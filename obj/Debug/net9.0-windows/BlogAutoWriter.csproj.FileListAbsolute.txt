@@ -18,11 +18,9 @@ C:\BlogAutoWriter\bin\Debug\net9.0-windows\System.Management.dll
 C:\BlogAutoWriter\bin\Debug\net9.0-windows\runtimes\win\lib\net7.0\System.Management.dll
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\BlogAutoWriter.csproj.AssemblyReference.cache
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\Resources\Styles.baml
-C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\LoginBiew.baml
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\SettingsView.baml
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\App.baml
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\MainWindow.g.cs
-C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\LoginBiew.g.cs
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\MainView.g.cs
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\SettingsView.g.cs
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\App.g.cs
@@ -44,3 +42,5 @@ C:\BlogAutoWriter\obj\Debug\net9.0-windows\refint\BlogAutoWriter.dll
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\BlogAutoWriter.pdb
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\BlogAutoWriter.genruntimeconfig.cache
 C:\BlogAutoWriter\obj\Debug\net9.0-windows\ref\BlogAutoWriter.dll
+C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\LoginView.g.cs
+C:\BlogAutoWriter\obj\Debug\net9.0-windows\Views\LoginView.baml

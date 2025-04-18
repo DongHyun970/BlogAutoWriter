@@ -36,12 +36,14 @@ namespace BlogAutoWriter.Common
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            // ✅ 정확한 가운데 정렬 계산
-            var verticalOffset = (finalSize.Height - _textBlock.DesiredSize.Height) / 2;
-            var location = new Point(6, verticalOffset); // 왼쪽 약간 들여쓰기
+            // TextBox 기본 padding + 약간 위로 올리기
+            double verticalOffset = (finalSize.Height - _textBlock.DesiredSize.Height) / 2 - 1;
 
+            var location = new Point(6, verticalOffset); // 왼쪽 여백 6px
             _textBlock.Arrange(new Rect(location, _textBlock.DesiredSize));
+
             return finalSize;
         }
+
     }
 }

@@ -37,7 +37,7 @@ namespace BlogAutoWriter.Common
             var layer = AdornerLayer.GetAdornerLayer(textBox);
             if (layer == null) return;
 
-            // 기존 Placeholder 제거
+            // 기존 Placeholder 제거 (중복 방지)
             var adorners = layer.GetAdorners(textBox);
             if (adorners != null)
             {
@@ -48,12 +48,16 @@ namespace BlogAutoWriter.Common
                 }
             }
 
-            // 텍스트가 비어 있을 때만 Placeholder 표시
-            if (string.IsNullOrEmpty(textBox.Text))
+            // 새 Placeholder 추가 (텍스트 비었을 때만)
+            if (string.IsNullOrWhiteSpace(textBox.Text))
             {
                 string placeholder = GetPlaceholder(textBox);
-                layer.Add(new PlaceholderAdorner(textBox, placeholder));
+                if (!string.IsNullOrEmpty(placeholder))
+                {
+                    layer.Add(new PlaceholderAdorner(textBox, placeholder));
+                }
             }
         }
+
     }
 }
