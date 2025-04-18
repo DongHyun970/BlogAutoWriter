@@ -37,8 +37,8 @@
         <!-- 메인 뷰 (중앙 확장 애니메이션) -->
         <Grid x:Name="MainViewContainer"
               Visibility="Collapsed"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center">
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
             <views:MainView x:Name="MainView"
                             Opacity="0"
                             RenderTransformOrigin="0.5,0.5">

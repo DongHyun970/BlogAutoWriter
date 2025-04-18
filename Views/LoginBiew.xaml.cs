@@ -55,6 +55,7 @@ namespace BlogAutoWriter.Views
 
                         window.LoginView.Visibility = Visibility.Collapsed;
                         window.MainView.Visibility = Visibility.Visible;
+                        window.ShowMainView(); // ✅ 이 줄 추가하면 해결!
                     }
                 }
                 else
