@@ -60,6 +60,7 @@
                        Visibility="Collapsed"
                        Margin="0,6,0,0"
                        HorizontalAlignment="Center"/>
+
         </StackPanel>
     </Grid>
 </UserControl>

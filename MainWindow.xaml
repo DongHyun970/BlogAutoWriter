@@ -9,25 +9,26 @@
         ResizeMode="NoResize"
         Background="Black">
 
-    <Window.Resources>
-        <!-- MainView 확대 -->
-        <Storyboard x:Key="ExpandMainView">
-            <DoubleAnimation Storyboard.TargetName="MainView"
-                             Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
-                             From="0.8" To="1.0" Duration="0:0:0.3"
-                             EasingFunction="{StaticResource ease}" />
-            <DoubleAnimation Storyboard.TargetName="MainView"
-                             Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
-                             From="0.8" To="1.0" Duration="0:0:0.3"
-                             EasingFunction="{StaticResource ease}" />
-            <DoubleAnimation Storyboard.TargetName="MainView"
-                             Storyboard.TargetProperty="Opacity"
-                             From="0" To="1" Duration="0:0:0.3" />
-        </Storyboard>
+        <Window.Resources>
+            <!-- 먼저 Easing 정의 -->
+            <CubicEase x:Key="ease" EasingMode="EaseOut"/>
 
-        <!-- Easing -->
-        <CubicEase x:Key="ease" EasingMode="EaseOut"/>
-    </Window.Resources>
+            <!-- 그다음에 Storyboard에서 사용 -->
+            <Storyboard x:Key="ExpandMainView">
+                <DoubleAnimation Storyboard.TargetName="MainView"
+                                Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                From="0.8" To="1.0" Duration="0:0:0.3"
+                                EasingFunction="{StaticResource ease}" />
+                <DoubleAnimation Storyboard.TargetName="MainView"
+                                Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                From="0.8" To="1.0" Duration="0:0:0.3"
+                                EasingFunction="{StaticResource ease}" />
+                <DoubleAnimation Storyboard.TargetName="MainView"
+                                Storyboard.TargetProperty="Opacity"
+                                From="0" To="1" Duration="0:0:0.3" />
+            </Storyboard>
+        </Window.Resources>
+
 
     <Grid>
         <!-- 로그인 뷰 -->
