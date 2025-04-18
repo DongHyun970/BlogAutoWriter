@@ -3,76 +3,71 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:BlogAutoWriter.Views"
              Background="{StaticResource DarkBackgroundBrush}">
-    <Grid>
-        <!-- 상단 헤더 -->
-        <Grid Background="#2d2d30" Height="40" VerticalAlignment="Top" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-            <TextBlock Text="BlogAutoWriter" Foreground="White" FontSize="16" Margin="10,0" VerticalAlignment="Center"/>
-            <Button Content="X" Width="40" Height="40" HorizontalAlignment="Right" Click="CloseBtn_Click"
-                    Background="Transparent" Foreground="White" BorderBrush="{x:Null}" FontSize="14"/>
-        </Grid>
 
-        <!-- 콘텐츠 패널 -->
-        <StackPanel Margin="20,60,100,20">
-            <TextBox x:Name="KeywordInput"
-                     Height="34"
-                     Margin="0,0,0,10"
-                     Padding="8"
-                     FontSize="14"
-                     Background="White"
-                     Foreground="Gray"
-                     Text="키워드 입력"
-                     GotFocus="RemoveText"
-                     LostFocus="AddText"
-                     BorderThickness="1" BorderBrush="Gray"
-                     VerticalContentAlignment="Center"/>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- 상단 헤더 -->
+            <RowDefinition Height="*"/>    <!-- 메인 콘텐츠 -->
+        </Grid.RowDefinitions>
 
-            <Button x:Name="RecommendBtn"
-                    Content="추천 키워드"
-                    Click="RecommendBtn_Click"
-                    Height="34"
-                    Style="{StaticResource ModernButton}" />
+        <!-- 🔹 상단 타이틀 -->
+        <DockPanel Grid.Row="0" Height="40" LastChildFill="True">
+            <TextBlock Text="BlogAutoWriter"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Foreground="White"
+                       Margin="10,0"/>
+            <Button Content="X"
+                    Width="40" Height="40"
+                    Background="Transparent"
+                    Foreground="White"
+                    Click="CloseBtn_Click"
+                    HorizontalAlignment="Right"/>
+        </DockPanel>
 
-            <CheckBox x:Name="ReserveCheck"
-                      Content="예약 발행"
-                      Foreground="White"
-                      FontSize="14"
-                      Margin="0,14,0,8"/>
+        <!-- 🔹 메인 콘텐츠 -->
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>  <!-- 좌측 입력 -->
+                <ColumnDefinition Width="2*"/>  <!-- 우측 설정 -->
+            </Grid.ColumnDefinitions>
 
-            <StackPanel x:Name="ReserveTimePanel" Orientation="Horizontal"
-                        Visibility="Collapsed" Margin="0,0,0,10">
-                <TextBox Height="30" Width="100"
-                         Text="HH:mm"
-                         GotFocus="RemoveText"
-                         LostFocus="AddText"
-                         Foreground="Gray"
-                         Padding="6"
-                         FontSize="14"
-                         Background="White"
-                         BorderThickness="1" BorderBrush="Gray"
-                         VerticalContentAlignment="Center"/>
+            <!-- 📝 좌측 영역 -->
+            <StackPanel Grid.Column="0" Margin="10">
+                <TextBox x:Name="KeywordInput"
+                         Height="34"
+                         PlaceholderText="키워드 입력"
+                         Margin="0,0,0,10"/>
+                <Button x:Name="RecommendBtn"
+                        Content="추천 키워드"
+                        Height="34"
+                        Margin="0,0,0,10"/>
+                <CheckBox x:Name="ReserveCheck"
+                          Content="예약 발행"
+                          Margin="0,0,0,10"/>
+                <StackPanel x:Name="ReserveTimePanel"
+                            Orientation="Horizontal"
+                            Visibility="Collapsed">
+                    <TextBox Width="100" Height="30" Text="HH:mm"/>
+                </StackPanel>
+
+                <!-- 🔧 나중에 추가할 수 있는 본문 작성 영역 -->
+                <TextBlock Text="본문 작성 영역 (예정)"
+                           Foreground="Gray"
+                           Margin="0,30,0,0"/>
             </StackPanel>
-        </StackPanel>
 
-        <!-- 설정 토글 버튼 -->
-        <Button x:Name="SettingsToggleBtn"
-                Width="36" Height="36"
-                HorizontalAlignment="Right" VerticalAlignment="Top"
-                Margin="0,45,14,0"
-                Click="SettingsToggleBtn_Click"
-                Content="⚙"
-                Style="{StaticResource ModernButton}"
-                ToolTip="설정 열기/닫기"
-                Panel.ZIndex="10" />
-
-        <!-- 설정 패널 -->
-        <Border x:Name="SettingsPanelHost"
-                Background="#292a2e"
-                Width="360"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Right"
-                Visibility="Collapsed"
-                Panel.ZIndex="9">
-            <views:SettingsView />
-        </Border>
+            <!-- ⚙️ 우측 설정 패널 -->
+            <Border Grid.Column="1"
+                    Background="#292a2e"
+                    CornerRadius="4"
+                    Padding="10"
+                    Visibility="{Binding IsSettingsVisible, Mode=TwoWay}">
+                <ScrollViewer>
+                    <views:SettingsView />
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
