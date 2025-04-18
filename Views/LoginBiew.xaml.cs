@@ -75,7 +75,7 @@ namespace BlogAutoWriter.Views
         private static async Task<(bool success, string reason, string grade)> ValidateLogin(string userId, string passwordHash)
         {
             var httpClient = new HttpClient();
-            var requestData = new { userid = userId, passwordHash };
+            var requestData = new { userid = userId, password = passwordHash };
             var json = JsonSerializer.Serialize(requestData);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
