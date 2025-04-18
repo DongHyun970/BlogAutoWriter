@@ -1,0 +1,77 @@
+<UserControl x:Class="BlogAutoWriter.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#292a2e">
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
+                <TextBlock Text="🔐 OpenAI API Key"
+                           Foreground="White" FontWeight="Bold"
+                           Margin="0,12,0,4" FontSize="13"/>
+                <TextBox x:Name="OpenAiKeyBox"
+                         Height="30" Padding="6"
+                         FontSize="13" Background="White"
+                         BorderThickness="1" BorderBrush="Gray"/>
+
+                <TextBlock Text="📧 카카오 이메일"
+                           Foreground="White" FontWeight="Bold"
+                           Margin="0,12,0,4" FontSize="13"/>
+                <TextBox x:Name="KakaoEmailBox"
+                         Height="30" Padding="6"
+                         FontSize="13" Background="White"
+                         BorderThickness="1" BorderBrush="Gray"/>
+
+                <TextBlock Text="🔒 카카오 비밀번호"
+                           Foreground="White" FontWeight="Bold"
+                           Margin="0,12,0,4" FontSize="13"/>
+                <PasswordBox x:Name="KakaoPasswordBox"
+                             Height="30" Padding="6"
+                             FontSize="13"
+                             Background="White"
+                             BorderThickness="1" BorderBrush="Gray"/>
+
+                <TextBlock Text="📧 티스토리 이메일"
+                           Foreground="White" FontWeight="Bold"
+                           Margin="0,12,0,4" FontSize="13"/>
+                <TextBox x:Name="TistoryEmailBox"
+                         Height="30" Padding="6"
+                         FontSize="13" Background="White"
+                         BorderThickness="1" BorderBrush="Gray"/>
+
+                <TextBlock Text="🔒 티스토리 비밀번호"
+                           Foreground="White" FontWeight="Bold"
+                           Margin="0,12,0,4" FontSize="13"/>
+                <PasswordBox x:Name="TistoryPasswordBox"
+                             Height="30" Padding="6"
+                             FontSize="13"
+                             Background="White"
+                             BorderThickness="1" BorderBrush="Gray"/>
+
+                <TextBlock Text="🏷 카테고리 (쉼표로 구분)"
+                           Foreground="White" FontWeight="Bold"
+                           Margin="0,12,0,4" FontSize="13"/>
+                <TextBox x:Name="CategoryBox"
+                         Height="30" Padding="6"
+                         FontSize="13" Background="White"
+                         BorderThickness="1" BorderBrush="Gray"/>
+
+                <!-- 저장/불러오기 버튼 -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,20,0,0">
+                    <Button Content="불러오기"
+                            x:Name="LoadBtn"
+                            Width="100" Height="32"
+                            Margin="0,0,10,0"
+                            Click="LoadBtn_Click"
+                            Style="{StaticResource ModernButton}" />
+                    <Button Content="저장"
+                            x:Name="SaveBtn"
+                            Width="100" Height="32"
+                            Click="SaveBtn_Click"
+                            Style="{StaticResource ModernButton}" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
