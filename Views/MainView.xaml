@@ -7,11 +7,11 @@
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/> <!-- 상단 타이틀 -->
+            <RowDefinition Height="Auto"/> <!-- 상단 헤더 -->
             <RowDefinition Height="*"/>    <!-- 메인 콘텐츠 -->
         </Grid.RowDefinitions>
 
-        <!-- 🔹 타이틀 영역 -->
+        <!-- 🔹 상단 헤더 -->
         <DockPanel Grid.Row="0" Height="40" LastChildFill="True">
             <TextBlock Text="BlogAutoWriter"
                        FontSize="18"
@@ -19,6 +19,11 @@
                        VerticalAlignment="Center"
                        Foreground="White"
                        Margin="10,0"/>
+            <Button Content="설정"
+                    Width="60" Height="30"
+                    Margin="0,0,10,0"
+                    Click="SettingsToggleBtn_Click"
+                    HorizontalAlignment="Right"/>
             <Button Content="X"
                     Width="40" Height="40"
                     Background="Transparent"
@@ -27,15 +32,15 @@
                     HorizontalAlignment="Right"/>
         </DockPanel>
 
-        <!-- 🔹 메인 콘텐츠 영역 -->
+        <!-- 🔹 메인 콘텐츠 -->
         <Grid Grid.Row="1" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
-            <!-- 📝 왼쪽 입력 영역 -->
-            <StackPanel Grid.Column="0" Margin="10">
+            <!-- 📝 입력 폼 -->
+            <StackPanel Grid.Column="0" Margin="10" VerticalAlignment="Top">
                 <TextBox x:Name="KeywordInput"
                          Height="34"
                          common:PlaceholderBehavior.Placeholder="키워드를 입력하세요"
@@ -58,13 +63,12 @@
                              common:PlaceholderBehavior.Placeholder="예: 14:00"/>
                 </StackPanel>
 
-                <!-- 본문 작성 영역은 추후 확장 가능 -->
                 <TextBlock Text="본문 작성 영역 (예정)"
                            Foreground="Gray"
                            Margin="0,30,0,0"/>
             </StackPanel>
 
-            <!-- ⚙️ 오른쪽 설정 패널 -->
+            <!-- ⚙️ 설정 패널 -->
             <Border x:Name="SettingsPanelHost"
                     Grid.Column="1"
                     Background="#292a2e"

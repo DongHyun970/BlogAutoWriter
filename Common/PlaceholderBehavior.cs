@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Documents;
 
 namespace BlogAutoWriter.Common
@@ -28,17 +27,17 @@ namespace BlogAutoWriter.Common
         {
             if (d is TextBox textBox)
             {
-                textBox.Loaded += (s, ev) => ShowPlaceholder(textBox);
-                textBox.TextChanged += (s, ev) => ShowPlaceholder(textBox);
+                textBox.Loaded += (s, ev) => UpdatePlaceholder(textBox);
+                textBox.TextChanged += (s, ev) => UpdatePlaceholder(textBox);
             }
         }
 
-        private static void ShowPlaceholder(TextBox textBox)
+        private static void UpdatePlaceholder(TextBox textBox)
         {
             var layer = AdornerLayer.GetAdornerLayer(textBox);
             if (layer == null) return;
 
-            // 기존 placeholder 제거
+            // 기존 Placeholder 제거
             var adorners = layer.GetAdorners(textBox);
             if (adorners != null)
             {
@@ -49,9 +48,11 @@ namespace BlogAutoWriter.Common
                 }
             }
 
+            // 텍스트가 비어 있을 때만 Placeholder 표시
             if (string.IsNullOrEmpty(textBox.Text))
             {
-                layer.Add(new PlaceholderAdorner(textBox, GetPlaceholder(textBox)));
+                string placeholder = GetPlaceholder(textBox);
+                layer.Add(new PlaceholderAdorner(textBox, placeholder));
             }
         }
     }
