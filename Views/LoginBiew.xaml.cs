@@ -21,54 +21,48 @@ namespace BlogAutoWriter.Views
 
         private async void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            AppState.CurrentUser = new UserInfo { UserId = "test", Grade = "pro" };
+            string userId = UserIdInput.Text.Trim();
+            string password = PasswordInput.Password.Trim();
 
-            if (Application.Current.MainWindow is MainWindow window)
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(password))
+                return;
+
+            string passwordHash = ComputeSha256Hash(password);
+
+            // UI 전환
+            LoginBtn.Visibility = Visibility.Collapsed;
+            LoadingBar.Visibility = Visibility.Visible;
+            ErrorIcon.Visibility = Visibility.Collapsed;
+
+            try
             {
-                window.ShowMainView();
+                var result = await ValidateLogin(userId, passwordHash);
+
+                if (result.success)
+                {
+                    AppState.CurrentUser = new UserInfo { UserId = userId, Grade = result.grade };
+
+                    if (Application.Current.MainWindow is MainWindow window)
+                    {
+                        window.BeginStoryboard(window.Resources["ExpandMainView"] as System.Windows.Media.Animation.Storyboard);
+                        window.LoginView.Visibility = Visibility.Collapsed;
+                        window.MainView.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    ShowLoginError();
+                }
             }
-            // string userId = UserIdInput.Text.Trim();
-            // string password = PasswordInput.Password.Trim();
-
-            // if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(password))
-            //     return;
-
-            // string passwordHash = ComputeSha256Hash(password);
-
-            // // UI 전환
-            // LoginBtn.Visibility = Visibility.Collapsed;
-            // LoadingBar.Visibility = Visibility.Visible;
-            // ErrorIcon.Visibility = Visibility.Collapsed;
-
-            // try
-            // {
-            //     var result = await ValidateLogin(userId, passwordHash);
-
-            //     if (result.success)
-            //     {
-            //         AppState.CurrentUser = new UserInfo { UserId = userId, Grade = result.grade };
-
-            //         if (Application.Current.MainWindow is MainWindow window)
-            //         {
-            //             window.BeginStoryboard(window.Resources["ExpandMainView"] as System.Windows.Media.Animation.Storyboard);
-            //             window.LoginView.Visibility = Visibility.Collapsed;
-            //             window.MainView.Visibility = Visibility.Visible;
-            //         }
-            //     }
-            //     else
-            //     {
-            //         ShowLoginError();
-            //     }
-            // }
-            // catch (Exception)
-            // {
-            //     ShowLoginError();
-            // }
-            // finally
-            // {
-            //     LoginBtn.Visibility = Visibility.Visible;
-            //     LoadingBar.Visibility = Visibility.Collapsed;
-            // }
+            catch (Exception)
+            {
+                ShowLoginError();
+            }
+            finally
+            {
+                LoginBtn.Visibility = Visibility.Visible;
+                LoadingBar.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void ShowLoginError()
