@@ -1,9 +1,0 @@
-user_id=test
-user_pw=1234
-openai_api_key=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
-deep_api_key=9916d7d4-81df-43df-a5f2-23b0e26e9bba
-kakao_email=kimceo_@naver.com
-kakao_password=kim31769
-tistory_email=
-tistory_password=
-category=여행,정보,건강,스포츠
