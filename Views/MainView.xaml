@@ -68,7 +68,7 @@
                     <TextBox x:Name="ReserveTimeInput"
                              Width="100"
                              Height="30"
-                             Text=""
+                             Text="{Binding ReserveTime, UpdateSourceTrigger=PropertyChanged}"
                              common:PlaceholderBehavior.Placeholder="예: 14:00"/>
                 </StackPanel>
 
