@@ -3,7 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:BlogAutoWriter.Views"
              xmlns:common="clr-namespace:BlogAutoWriter.Common"
+             
              Background="{StaticResource DarkBackgroundBrush}">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -53,12 +58,15 @@
 
                 <CheckBox x:Name="ReserveCheck"
                           Content="예약 발행"
-                          Margin="0,0,0,10"/>
+                          Margin="0,0,0,10"
+                          Checked="ReserveCheck_Checked"
+                          Unchecked="ReserveCheck_Unchecked"/>
 
                 <StackPanel x:Name="ReserveTimePanel"
                             Orientation="Horizontal"
                             Visibility="Collapsed">
-                    <TextBox Width="100"
+                    <TextBox x:Name="ReserveTimeInput"
+                             Width="100"
                              Height="30"
                              Text=""
                              common:PlaceholderBehavior.Placeholder="예: 14:00"/>

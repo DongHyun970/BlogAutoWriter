@@ -17,8 +17,8 @@ namespace BlogAutoWriter.Views
         {
             InitializeComponent();
 
-            ReserveCheck.Checked += (_, _) => ReserveTimePanel.Visibility = Visibility.Visible;
-            ReserveCheck.Unchecked += (_, _) => ReserveTimePanel.Visibility = Visibility.Collapsed;
+            ReserveCheck.Checked += ReserveCheck_Checked;
+            ReserveCheck.Unchecked += ReserveCheck_Unchecked;
 
             Loaded += MainView_Loaded;
         }
@@ -55,22 +55,23 @@ namespace BlogAutoWriter.Views
             RecommendBtn.Content = "추천 키워드";
         }
 
-        private void RemoveText(object sender, RoutedEventArgs e)
+        private void ReserveCheck_Checked(object sender, RoutedEventArgs e)
         {
-            if (sender is TextBox tb && tb.Text == "HH:mm")
+            ReserveTimePanel.Visibility = Visibility.Visible;
+
+            // Placeholder가 정확히 재적용되도록 렌더링 재요청
+            Dispatcher.InvokeAsync(() =>
             {
-                tb.Text = "";
-                tb.Foreground = System.Windows.Media.Brushes.White;
-            }
+                ReserveTimeInput.InvalidateVisual();
+                ReserveTimeInput.UpdateLayout();
+            });
         }
 
-        private void AddText(object sender, RoutedEventArgs e)
+        private void ReserveCheck_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (sender is TextBox tb && string.IsNullOrWhiteSpace(tb.Text))
-            {
-                tb.Text = "HH:mm";
-                tb.Foreground = System.Windows.Media.Brushes.Gray;
-            }
+            ReserveTimePanel.Visibility = Visibility.Collapsed;
+            // ✅ 텍스트 초기화
+            ReserveTimeInput.Text = "";
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
