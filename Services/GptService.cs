@@ -1,63 +1,44 @@
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BlogAutoWriter; // Models 제거하고 루트 참조
 
-namespace BlogAutoWriter
+namespace BlogAutoWriter.Services
 {
-    public class GptService
+    public static class GptService
     {
-        private static readonly HttpClient _httpClient = new();
+        private static readonly HttpClient _httpClient = new HttpClient();
+        private const string ApiUrl = "https://api.openai.com/v1/chat/completions"; // 예시용 URL
+        private const string ApiKey = "YOUR_API_KEY"; // 실제 키로 교체
 
-        public async Task<List<string>> GetRecommendedKeywords()
+        public static async Task<string> GenerateBlogContentAsync(string prompt)
         {
-            var apiKey = AppSettings.Current.OpenAiApiKey;
-
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new Exception("OpenAI API 키가 설정되지 않았습니다.");
-
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", apiKey);
-
             var requestBody = new
             {
                 model = "gpt-3.5-turbo",
                 messages = new[]
                 {
-                    new { role = "user", content = "블로그 주제로 쓸만한 인기 키워드 5개를 추천해줘." }
+                    new { role = "user", content = prompt }
                 }
             };
 
-            var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+            var requestJson = JsonSerializer.Serialize(requestBody);
+            var request = new HttpRequestMessage(HttpMethod.Post, ApiUrl);
+            request.Headers.Add("Authorization", $"Bearer {ApiKey}");
+            request.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
             var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+            var result = doc.RootElement
+                            .GetProperty("choices")[0]
+                            .GetProperty("message")
+                            .GetProperty("content")
+                            .GetString();
 
-            var doc = JsonDocument.Parse(json);
-            var text = doc.RootElement.GetProperty("choices")[0]
-                                      .GetProperty("message")
-                                      .GetProperty("content")
-                                      .GetString();
-
-            return ParseKeywords(text ?? "");
-        }
-
-        private List<string> ParseKeywords(string text)
-        {
-            var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            var result = new List<string>();
-
-            foreach (var line in lines)
-            {
-                var keyword = line.Trim().TrimStart('-', '*', '0', '1', '2', '3', '4', '5', '.', ' ');
-                if (!string.IsNullOrWhiteSpace(keyword))
-                    result.Add(keyword);
-            }
-
-            return result;
+            return result ?? "응답이 비어 있습니다.";
         }
     }
 }

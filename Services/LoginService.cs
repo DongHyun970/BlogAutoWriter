@@ -15,8 +15,8 @@ namespace BlogAutoWriter.Services
         public class LoginResult
         {
             public bool Success { get; set; }
-            public string Reason { get; set; }
-            public string Grade { get; set; }
+            public string? Reason { get; set; } = string.Empty;
+            public string? Grade { get; set; } = string.Empty;
         }
 
         public static async Task<LoginResult> LoginAsync(string userid, string passwordHash)
@@ -36,7 +36,7 @@ namespace BlogAutoWriter.Services
 
                 var json = await response.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<LoginResult>(json);
-                return result;
+                return result ?? new LoginResult { Success = false, Reason = "unknown_error" };
             }
             catch (Exception ex)
             {

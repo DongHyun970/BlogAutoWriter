@@ -1,94 +1,41 @@
-<UserControl x:Class="BlogAutoWriter.MainView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="Black">
+<Window x:Class="BlogAutoWriter.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Blog Generator" Height="600" Width="900"
+        Background="{StaticResource BackgroundBrush}"
+        WindowStartupLocation="CenterScreen">
 
-    <Grid>
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- TitleBar 영역 (드래그 지원) -->
-        <Grid x:Name="TitleBar"
-              Height="40"
-              Background="#222"
-              VerticalAlignment="Top"
-              MouseDown="TitleBar_MouseDown">
-            <TextBlock Text="BlogAutoWriter"
-                       Foreground="White"
-                       VerticalAlignment="Center"
-                       Margin="10,0,0,0"
-                       FontSize="16"/>
-            <Button x:Name="CloseBtn"
-                    Content="X"
-                    Width="30" Height="30"
-                    HorizontalAlignment="Right"
-                    Margin="0,5,5,5"
-                    Click="CloseBtn_Click"/>
-        </Grid>
+        <!-- 🔎 입력 영역 -->
+        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+            <TextBlock Text="블로그 키워드" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBox x:Name="KeywordBox" Height="35"/>
 
-        <!-- 본문 콘텐츠 -->
-        <StackPanel Margin="20,60,20,20"
-                    VerticalAlignment="Top"
-                    Orientation="Vertical">
+            <TextBlock Text="작성 스타일" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,20,0,10"/>
+            <ComboBox x:Name="StyleSelector" Height="35" SelectedIndex="0">
+                <ComboBoxItem Content="일반 블로그"/>
+                <ComboBoxItem Content="리뷰"/>
+                <ComboBoxItem Content="에세이"/>
+            </ComboBox>
 
-            <TextBox x:Name="KeywordInput"
-                     Height="30"
-                     FontSize="14"
-                     Padding="6"
-                     Margin="0,0,0,10"
-                     VerticalContentAlignment="Center"
-                     Text=""
-                     Foreground="Black"
-                     Background="White"/>
-
-            <Button x:Name="RecommendBtn"
-                    Content="키워드 추천"
-                    Height="30"
-                    Click="RecommendBtn_Click"
-                    Margin="0,0,0,10"/>
-
-            <CheckBox x:Name="ReserveCheck"
-                      Content="예약 발행"
-                      Margin="0,0,0,10"
-                      Checked="ReserveCheck_Checked"
-                      Unchecked="ReserveCheck_Unchecked"/>
-
-            <StackPanel x:Name="ReserveTimePanel"
-                        Orientation="Horizontal"
-                        Visibility="Collapsed"
-                        Margin="0,0,0,10">
-                <TextBlock Text="예약 시간:"
-                           Foreground="White"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="ReserveTimeInput"
-                         Width="100"
-                         Height="25"
-                         FontSize="13"
-                         Padding="4"
-                         VerticalContentAlignment="Center"
-                         Background="White"
-                         Foreground="Black"/>
-            </StackPanel>
-
-            <Button x:Name="SettingsToggleBtn"
-                    Content="설정"
-                    Width="60"
-                    Height="30"
-                    Click="SettingsToggleBtn_Click"/>
+            <Button x:Name="GenerateButton" Content="작성 요청" Height="40" Click="GenerateButton_Click" Margin="0,30,0,0"/>
         </StackPanel>
 
-        <!-- 설정 패널 -->
-        <Border x:Name="SettingsPanelHost"
-                Background="#333"
-                BorderBrush="Gray"
-                BorderThickness="1"
-                Padding="10"
-                Visibility="Collapsed"
-                VerticalAlignment="Bottom"
-                Margin="20"
-                Height="150">
-            <TextBlock Text="설정 내용"
-                       Foreground="White"/>
+        <!-- 📄 미리보기 영역 -->
+        <Border Grid.Column="1" Background="#2D2D40" Padding="15">
+            <ScrollViewer>
+                <TextBlock x:Name="PreviewTextBlock"
+                           Text="여기에 작성된 블로그 글이 출력됩니다."
+                           Foreground="White" TextWrapping="Wrap" FontSize="14"/>
+            </ScrollViewer>
         </Border>
-
     </Grid>
-</UserControl>
+</Window>
