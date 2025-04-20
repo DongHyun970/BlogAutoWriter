@@ -1,4 +1,4 @@
-namespace BlogAutoWriter.Models
+namespace BlogAutoWriter
 {
     public static class AppState
     {

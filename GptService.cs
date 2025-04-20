@@ -5,9 +5,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BlogAutoWriter.Models;
+using BlogAutoWriter; // Models 제거하고 루트 참조
 
-namespace BlogAutoWriter.Services
+namespace BlogAutoWriter
 {
     public class GptService
     {
@@ -16,10 +16,12 @@ namespace BlogAutoWriter.Services
         public async Task<List<string>> GetRecommendedKeywords()
         {
             var apiKey = AppSettings.Current.OpenAiApiKey;
+
             if (string.IsNullOrWhiteSpace(apiKey))
                 throw new Exception("OpenAI API 키가 설정되지 않았습니다.");
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", apiKey);
 
             var requestBody = new
             {
@@ -35,7 +37,10 @@ namespace BlogAutoWriter.Services
             var json = await response.Content.ReadAsStringAsync();
 
             var doc = JsonDocument.Parse(json);
-            var text = doc.RootElement.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
+            var text = doc.RootElement.GetProperty("choices")[0]
+                                      .GetProperty("message")
+                                      .GetProperty("content")
+                                      .GetString();
 
             return ParseKeywords(text ?? "");
         }

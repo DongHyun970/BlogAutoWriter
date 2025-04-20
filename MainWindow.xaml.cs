@@ -13,7 +13,7 @@ namespace BlogAutoWriter
 
         public void ShowMainView()
         {
-            // 1. 창 크기 부드럽게 확장
+            // 창 크기 애니메이션
             var widthAnim = new DoubleAnimation
             {
                 From = this.Width,
@@ -32,13 +32,12 @@ namespace BlogAutoWriter
             this.BeginAnimation(Window.WidthProperty, widthAnim);
             this.BeginAnimation(Window.HeightProperty, heightAnim);
 
-            // 2. 메인 뷰 표시 + 애니메이션 시작
+            // MainView 표시 및 애니메이션
             MainViewContainer.Visibility = Visibility.Visible;
-
             var storyboard = (Storyboard)this.Resources["ExpandMainView"];
             storyboard.Begin(this);
 
-            // 3. 로그인 뷰 숨김
+            // LoginView 숨기기
             LoginView.Visibility = Visibility.Collapsed;
         }
     }

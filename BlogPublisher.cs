@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace BlogAutoWriter.Services
+namespace BlogAutoWriter
 {
     public class BlogPublisher
     {

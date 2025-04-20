@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using BlogAutoWriter.Models;
+using BlogAutoWriter; // Models 제거
 
 namespace BlogAutoWriter
 {
@@ -8,7 +8,7 @@ namespace BlogAutoWriter
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            AppSettings.Load(); // 자동 설정 불러오기
+            AppSettings.Load();
         }
     }
 }

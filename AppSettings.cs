@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 
-namespace BlogAutoWriter.Models
+namespace BlogAutoWriter
 {
     public class AppSettings
     {
@@ -35,3 +35,4 @@ namespace BlogAutoWriter.Models
         }
     }
 }
+
