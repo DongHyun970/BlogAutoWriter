@@ -86,6 +86,15 @@ namespace BlogAutoWriter
             }
         }
 
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Window.GetWindow(this)?.DragMove();
+            }
+        }
+
+
         private void SettingsToggleBtn_Click(object sender, RoutedEventArgs e)
         {
             SettingsPanelHost.Visibility = Visibility.Visible;
