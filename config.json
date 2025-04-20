@@ -1,18 +1,10 @@
 {
-    "context": [
-      {
-        "name": "FullProject",
-        "root": ".",
-        "includes": ["**/*.cs", "**/*.xaml", "**/*.json", "**/*.config"],
-        "excludes": ["bin/**", "obj/**", ".vs/**", ".git/**"]
-      }
-    ],
-    "models": {
-      "default": {
-        "provider": "openai",
-        "model": "gpt-4-turbo",
-        "apiKey": "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"
-      }
-    }
-  }
-  
+  "OpenAiApiKey": "test",
+  "KakaoEmail": "",
+  "KakaoPassword": "",
+  "TistoryEmail": "",
+  "TistoryPassword": "",
+  "Categories": [
+    ""
+  ]
+}

@@ -130,7 +130,7 @@ namespace BlogAutoWriter.Common
             else if (!isEmpty && existing != null)
             {
                 layer.Remove(existing);
-                SetPlaceholderAdorner(ctrl, null);
+                SetPlaceholderAdorner(ctrl, null!);
             }
         }
 
@@ -141,7 +141,7 @@ namespace BlogAutoWriter.Common
             if (existing != null)
             {
                 AdornerLayer.GetAdornerLayer(ctrl)?.Remove(existing);
-                SetPlaceholderAdorner(ctrl, null);
+                SetPlaceholderAdorner(ctrl, null!);
             }
         }
 
