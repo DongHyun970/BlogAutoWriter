@@ -3,10 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using BlogAutoWriter.Models;
-using BlogAutoWriter.Services;
+using BlogAutoWriter;
 
-namespace BlogAutoWriter.Views
+namespace BlogAutoWriter
 {
     public partial class MainView : UserControl
     {

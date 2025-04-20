@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
-using BlogAutoWriter.Models;
+using BlogAutoWriter;
 
-namespace BlogAutoWriter.Views
+namespace BlogAutoWriter
 {
     public partial class SettingsView : UserControl
     {
