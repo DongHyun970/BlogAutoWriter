@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BlogAutoWriter.Views"
         mc:Ignorable="d"
         Title="Login" Height="500" Width="400"
         WindowStartupLocation="CenterScreen"
@@ -12,14 +11,16 @@
 
     <Window.Resources>
         <Storyboard x:Key="ShakeAnimation" RepeatBehavior="1x">
-            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
-                             From="0" To="10" Duration="0:0:0.05" AutoReverse="True" RepeatBehavior="5x"/>
+            <DoubleAnimation 
+                Storyboard.TargetName="WindowShaker"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                From="0" To="10" Duration="0:0:0.05" AutoReverse="True" RepeatBehavior="5x"/>
         </Storyboard>
     </Window.Resources>
 
-    <Grid Margin="20" RenderTransformOrigin="0.5,0.5">
+    <Grid Margin="20" x:Name="WindowShaker" RenderTransformOrigin="0.5,0.5">
         <Grid.RenderTransform>
-            <TranslateTransform x:Name="WindowShaker" />
+            <TranslateTransform />
         </Grid.RenderTransform>
 
         <Border CornerRadius="15" Background="#2D2D40" Padding="20">
@@ -38,9 +39,9 @@
                          FontSize="16"
                          Foreground="White"
                          Background="#3E3E55"
-                         local:PlaceholderBehavior.Placeholder="User ID"
                          BorderThickness="0"
-                         Padding="10"/>
+                         Padding="10"
+                         Text=""/>
 
                 <!-- Password -->
                 <PasswordBox x:Name="PasswordBox" 
@@ -49,7 +50,6 @@
                              FontSize="16"
                              Foreground="White"
                              Background="#3E3E55"
-                             local:PlaceholderBehavior.Placeholder="Password"
                              BorderThickness="0"
                              Padding="10"/>
 

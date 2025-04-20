@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace BlogAutoWriter.Services
     {
         private static readonly HttpClient _httpClient = new HttpClient();
 
-        private const string LoginUrl = "https://script.google.com/macros/s/AKfycbwUxlxvupeXpJ3PB-uTzeuX4dqro7DTI6N8IJAyQqnRJitXpcv6KGfoWV7L_FMaECRj/exec"; // TODO: 실제 URL로 교체
+        private const string LoginUrl = "https://script.google.com/macros/s/AKfycbwUxlxvupeXpJ3PB-uTzeuX4dqro7DTI6N8IJAyQqnRJitXpcv6KGfoWV7L_FMaECRj/exec"; // 실제 URL로 교체
 
         public class LoginResult
         {
@@ -19,8 +20,10 @@ namespace BlogAutoWriter.Services
             public string? Grade { get; set; } = string.Empty;
         }
 
-        public static async Task<LoginResult> LoginAsync(string userid, string passwordHash)
+        public static async Task<LoginResult> LoginAsync(string userid, string plainPassword)
         {
+            var passwordHash = ComputeSha256Hash(plainPassword);
+
             var payload = new
             {
                 userid = userid,
@@ -35,16 +38,37 @@ namespace BlogAutoWriter.Services
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<LoginResult>(json);
-                return result ?? new LoginResult { Success = false, Reason = "unknown_error" };
+                Console.WriteLine("💬 서버 응답: " + json);
+
+                var result = JsonSerializer.Deserialize<LoginResult>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return result ?? new LoginResult { Success = false, Reason = "invalid_response" };
             }
             catch (Exception ex)
             {
                 return new LoginResult
                 {
                     Success = false,
-                    Reason = "network_error: " + ex.Message
+                    Reason = "exception: " + ex.Message
                 };
+            }
+        }
+
+        public static string ComputeSha256Hash(string rawData)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+                StringBuilder builder = new StringBuilder();
+                foreach (var b in bytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
             }
         }
     }
