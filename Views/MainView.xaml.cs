@@ -1,10 +1,10 @@
 using System;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BlogAutoWriter.Services;
 using BlogAutoWriter.Views;
+using Timer = System.Timers.Timer;
 
 namespace BlogAutoWriter.Views
 {
@@ -14,6 +14,7 @@ namespace BlogAutoWriter.Views
         private DateTime? startDate;
         private int validDays;
         private string grade = "Free";
+        private string userId = "";
 
         public MainView()
         {
@@ -23,19 +24,19 @@ namespace BlogAutoWriter.Views
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-            // 테스트용: 실제 로그인 후 받아온 값으로 치환해야 함
             startDate = App.Current.Properties["StartDate"] as DateTime? ?? DateTime.Now;
             validDays = (int)(App.Current.Properties["ValidDays"] ?? 0);
             grade = App.Current.Properties["Grade"] as string ?? "Free";
+            userId = App.Current.Properties["UserId"] as string ?? "unknown";
 
-            ShowMembershipInfo();
+            UpdateMembershipText();
             StartMembershipTimer();
         }
 
-        private void ShowMembershipInfo()
+        private void UpdateMembershipText()
         {
-            var remainDays = (int)(validDays - (DateTime.Now - startDate!.Value).TotalDays);
-            MessageBox.Show($"남은 기간: {remainDays}일 | 등급: {grade}", "멤버십 정보", MessageBoxButton.OK, MessageBoxImage.Information);
+            int remainDays = Math.Max(0, validDays - (int)(DateTime.Now - startDate!.Value).TotalDays);
+            UserInfoText.Text = $"User: {userId}    등급: {grade}    남은 기간: {remainDays}일";
         }
 
         private void StartMembershipTimer()
@@ -45,7 +46,7 @@ namespace BlogAutoWriter.Views
             membershipTimer.Start();
         }
 
-        private void CheckMembership(object? sender, ElapsedEventArgs e)
+        private void CheckMembership(object? sender, System.Timers.ElapsedEventArgs e)
         {
             var now = DateTime.Now;
             var diff = (now - startDate!.Value).TotalDays;
@@ -58,6 +59,10 @@ namespace BlogAutoWriter.Views
                     MessageBox.Show("⚠ 사용 기간이 만료되었습니다. 프로그램이 종료됩니다.", "만료", MessageBoxButton.OK, MessageBoxImage.Warning);
                     Application.Current.Shutdown();
                 });
+            }
+            else
+            {
+                Dispatcher.Invoke(UpdateMembershipText);
             }
         }
 
@@ -74,7 +79,7 @@ namespace BlogAutoWriter.Views
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            new SettingsWindow().ShowDialog();
+            new SettingsView().ShowDialog();
         }
 
         private async void GenerateButton_Click(object sender, RoutedEventArgs e)

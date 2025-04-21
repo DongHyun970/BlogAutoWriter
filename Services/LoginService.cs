@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace BlogAutoWriter.Services
 {
@@ -13,12 +14,21 @@ namespace BlogAutoWriter.Services
 
         private const string LoginUrl = "https://script.google.com/macros/s/AKfycbwUxlxvupeXpJ3PB-uTzeuX4dqro7DTI6N8IJAyQqnRJitXpcv6KGfoWV7L_FMaECRj/exec"; // 실제 URL로 교체
 
-        public class LoginResult
-        {
-            public bool Success { get; set; }
-            public string? Reason { get; set; } = string.Empty;
-            public string? Grade { get; set; } = string.Empty;
-        }
+    public class LoginResult
+    {
+        public bool Success { get; set; }
+        public string Reason { get; set; } = string.Empty;
+        public string Grade { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
+
+        // 날짜 문자열로 받아서 파싱
+        public string StartDateRaw { get; set; } = string.Empty;
+        public int ValidDays { get; set; }
+
+        [JsonIgnore]
+        public DateTime StartDate => DateTime.TryParse(StartDateRaw, out var dt) ? dt : DateTime.Now;
+    }
+
 
         public static async Task<LoginResult> LoginAsync(string userid, string plainPassword)
         {

@@ -1,5 +1,7 @@
 using System.Windows;
 using BlogAutoWriter.Services;
+using System.Windows.Controls;
+
 
 namespace BlogAutoWriter.Views
 {
