@@ -4,79 +4,53 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Login" Height="500" Width="400"
+        Title="LoginView" Height="550" Width="420"
+        WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        Background="#1E1E2F">
+        Loaded="Window_Loaded">
 
     <Window.Resources>
-        <Storyboard x:Key="ShakeAnimation" RepeatBehavior="1x">
-            <DoubleAnimation 
-                Storyboard.TargetName="WindowShaker"
-                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
-                From="0" To="10" Duration="0:0:0.05" AutoReverse="True" RepeatBehavior="5x"/>
+        <!-- ✨ 로그인 진입 애니메이션 -->
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.4" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                             From="20" To="0" Duration="0:0:0.4" />
+        </Storyboard>
+
+        <!-- ❌ 로그인 실패 흔들림 -->
+        <Storyboard x:Key="Shake">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                             From="0" To="10" Duration="0:0:0.05" AutoReverse="True" RepeatBehavior="5x"/>
         </Storyboard>
     </Window.Resources>
 
-    <Grid Margin="20" x:Name="WindowShaker" RenderTransformOrigin="0.5,0.5">
-        <Grid.RenderTransform>
+    <Border x:Name="RootContainer" Background="{StaticResource BackgroundBrush}" CornerRadius="14" Padding="20" BorderThickness="2" BorderBrush="#444"
+            RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
             <TranslateTransform />
-        </Grid.RenderTransform>
+        </Border.RenderTransform>
 
-        <Border CornerRadius="15" Background="#2D2D40" Padding="20">
-            <StackPanel>
-                <TextBlock Text="Login to BlogAutoWriter" 
-                           FontSize="24" 
-                           Foreground="White" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,20"/>
+        <Grid>
+            <!-- Custom Title Bar -->
+            <DockPanel MouseDown="TitleBar_MouseDown" VerticalAlignment="Top" LastChildFill="False" Margin="0,0,0,20">
+                <TextBlock Text="🔐 BlogAutoWriter" FontSize="16" FontWeight="Bold" Foreground="White" Margin="5,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                <Button Content="×" Width="30" Height="30" DockPanel.Dock="Right" Click="Close_Click"
+                        Background="Transparent" Foreground="White" FontSize="16" BorderThickness="0" Cursor="Hand"/>
+            </DockPanel>
 
-                <!-- User ID -->
-                <TextBox x:Name="UserIdTextBox" 
-                         Height="40" 
-                         Margin="0,0,0,15"
-                         FontSize="16"
-                         Foreground="White"
-                         Background="#3E3E55"
-                         BorderThickness="0"
-                         Padding="10"
-                         Text=""/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+                <TextBlock Text="로그인" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-                <!-- Password -->
-                <PasswordBox x:Name="PasswordBox" 
-                             Height="40" 
-                             Margin="0,0,0,15"
-                             FontSize="16"
-                             Foreground="White"
-                             Background="#3E3E55"
-                             BorderThickness="0"
-                             Padding="10"/>
+                <TextBox x:Name="UserIdTextBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,10"/>
+                <PasswordBox x:Name="PasswordBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,10"/>
+                <CheckBox x:Name="RememberIdCheckBox" Content="아이디 저장" Foreground="LightGray" Margin="0,0,0,10"/>
 
-                <!-- Login Button -->
-                <Button Content="Login" 
-                        Height="40" 
-                        Background="#FF6F61"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        BorderBrush="Transparent"
-                        Cursor="Hand"
-                        Click="LoginButton_Click"
-                        Margin="0,10,0,0"
-                        Padding="10"/>
+                <Button x:Name="LoginButton" Style="{StaticResource RoundedButtonStyle}" Content="로그인" Click="LoginButton_Click"/>
 
-                <!-- ProgressBar -->
-                <ProgressBar x:Name="LoginProgressBar" Height="10" Visibility="Collapsed"
-                             IsIndeterminate="True" Margin="0,15,0,0"/>
-
-                <!-- Status Message -->
-                <TextBlock x:Name="StatusText" 
-                           Foreground="Orange" 
-                           FontSize="14" 
-                           Margin="0,15,0,0"
-                           TextAlignment="Center"
-                           Opacity="0"/>
+                <ProgressBar x:Name="LoginProgressBar" Height="10" Visibility="Collapsed" IsIndeterminate="True" Margin="0,20,0,0"/>
+                <TextBlock x:Name="StatusText" FontSize="13" Foreground="{StaticResource ErrorBrush}" TextAlignment="Center" Opacity="0" Margin="0,15,0,0"/>
             </StackPanel>
-        </Border>
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

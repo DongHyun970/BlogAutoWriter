@@ -4,38 +4,56 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Blog Generator" Height="600" Width="900"
-        Background="{StaticResource BackgroundBrush}"
+        Title="MainView" Height="600" Width="900"
+        WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent"
         WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
+    <Border Background="{StaticResource BackgroundBrush}" CornerRadius="14" Padding="20" BorderThickness="2" BorderBrush="#444">
+        <Grid>
+            <!-- Custom Title Bar -->
+            <DockPanel MouseDown="TitleBar_MouseDown" VerticalAlignment="Top" LastChildFill="False" Margin="0,0,0,20">
+                <TextBlock Text="📝 BlogAutoWriter Main" FontSize="16" FontWeight="Bold" Foreground="White" Margin="5,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                <Button Content="×" Width="30" Height="30" DockPanel.Dock="Right" Click="Close_Click"
+                        Background="Transparent" Foreground="White" FontSize="16" BorderThickness="0" Cursor="Hand"/>
+            </DockPanel>
 
-        <!-- 🔎 입력 영역 -->
-        <StackPanel Grid.Column="0" Margin="0,0,20,0">
-            <TextBlock Text="블로그 키워드" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
-            <TextBox x:Name="KeywordBox" Height="35"/>
+            <Grid Margin="0,40,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="작성 스타일" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,20,0,10"/>
-            <ComboBox x:Name="StyleSelector" Height="35" SelectedIndex="0">
-                <ComboBoxItem Content="일반 블로그"/>
-                <ComboBoxItem Content="리뷰"/>
-                <ComboBoxItem Content="에세이"/>
-            </ComboBox>
+                <!-- 입력 패널 -->
+                <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                    <TextBlock Text="블로그 키워드" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBox x:Name="KeywordBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,20"/>
 
-            <Button x:Name="GenerateButton" Content="작성 요청" Height="40" Click="GenerateButton_Click" Margin="0,30,0,0"/>
-        </StackPanel>
+                    <TextBlock Text="작성 스타일" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <ComboBox x:Name="StyleSelector" Height="35" SelectedIndex="0" Margin="0,0,0,20">
+                        <ComboBoxItem Content="일반 블로그"/>
+                        <ComboBoxItem Content="리뷰"/>
+                        <ComboBoxItem Content="에세이"/>
+                    </ComboBox>
 
-        <!-- 📄 미리보기 영역 -->
-        <Border Grid.Column="1" Background="#2D2D40" Padding="15">
-            <ScrollViewer>
-                <TextBlock x:Name="PreviewTextBlock"
-                           Text="여기에 작성된 블로그 글이 출력됩니다."
-                           Foreground="White" TextWrapping="Wrap" FontSize="14"/>
-            </ScrollViewer>
-        </Border>
-    </Grid>
+                    <TextBlock Text="블로그 로그인 방식" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <ComboBox x:Name="BlogLoginMethodComboBox" Height="35" SelectedIndex="0" Margin="0,0,0,20">
+                        <ComboBoxItem Content="카카오 로그인"/>
+                        <ComboBoxItem Content="티스토리 이메일 로그인"/>
+                    </ComboBox>
+
+                    <Button x:Name="GenerateButton" Style="{StaticResource RoundedButtonStyle}" Content="작성 요청" Click="GenerateButton_Click"/>
+                </StackPanel>
+
+                <!-- 미리보기 영역 -->
+                <Border Grid.Column="1" Background="#3E3E55" CornerRadius="8" Padding="15">
+                    <ScrollViewer>
+                        <TextBlock x:Name="PreviewTextBlock"
+                                   Text="여기에 작성된 블로그 글이 출력됩니다."
+                                   Foreground="White" TextWrapping="Wrap" FontSize="14"/>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
 </Window>
