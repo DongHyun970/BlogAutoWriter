@@ -49,8 +49,8 @@ namespace BlogAutoWriter.Services
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                // 👇 여기에 추가
-                MessageBox.Show("💬 서버 응답:\n" + json);
+                // Json 확인용
+                //MessageBox.Show("💬 서버 응답:\n" + json);
 
                 var result = JsonSerializer.Deserialize<LoginResult>(json, new JsonSerializerOptions
                 {

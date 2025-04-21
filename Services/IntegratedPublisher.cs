@@ -84,10 +84,10 @@ namespace TistoryAutoPoster
                     var allCookies = driver.Manage().Cookies.AllCookies;
                     var cookieData = allCookies.Select(c => new CookieData
                     {
-                        domain = c.Domain,
+                        domain = c.Domain ?? "",
                         name = c.Name,
                         value = c.Value,
-                        path = c.Path,
+                        path = c.Path ?? "/",
                         expiry = c.Expiry
                     });
                     File.WriteAllText(CookieFilePath, JsonSerializer.Serialize(cookieData, new JsonSerializerOptions { WriteIndented = true }));
@@ -167,11 +167,12 @@ namespace TistoryAutoPoster
 
         private class CookieData
         {
-            public string name { get; set; }
-            public string value { get; set; }
-            public string domain { get; set; }
-            public string path { get; set; }
+            public string name { get; set; } = "";
+            public string value { get; set; } = "";
+            public string domain { get; set; } = "";
+            public string path { get; set; } = "";
             public DateTime? expiry { get; set; }
         }
+
     }
 }
