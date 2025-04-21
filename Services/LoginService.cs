@@ -1,4 +1,5 @@
 using System;
+using System.Windows;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -48,7 +49,8 @@ namespace BlogAutoWriter.Services
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("💬 서버 응답: " + json);
+                // 👇 여기에 추가
+                MessageBox.Show("💬 서버 응답:\n" + json);
 
                 var result = JsonSerializer.Deserialize<LoginResult>(json, new JsonSerializerOptions
                 {

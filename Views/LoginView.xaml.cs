@@ -1,10 +1,10 @@
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using BlogAutoWriter.Services;
 using System.Windows.Controls;
-
 
 namespace BlogAutoWriter.Views
 {
@@ -63,7 +63,8 @@ namespace BlogAutoWriter.Views
                         File.Delete(SettingsFile);
 
                     // ✅ 로그인 정보 App.Properties에 저장
-                    App.Current.Properties["StartDate"] = result.StartDate;
+                    App.Current.Properties["UserId"] = result.UserId;
+                    App.Current.Properties["StartDate"] = result.StartDateRaw; // 수정된 부분
                     App.Current.Properties["ValidDays"] = result.ValidDays;
                     App.Current.Properties["Grade"] = result.Grade;
 
@@ -83,7 +84,7 @@ namespace BlogAutoWriter.Views
                     shake.Begin(RootContainer);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 LoginProgressBar.Visibility = Visibility.Collapsed;
                 LoginButton.IsEnabled = true;

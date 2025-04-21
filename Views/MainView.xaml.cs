@@ -24,10 +24,16 @@ namespace BlogAutoWriter.Views
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-            startDate = App.Current.Properties["StartDate"] as DateTime? ?? DateTime.Now;
+            userId = App.Current.Properties["UserId"] as string ?? "unknown";
+
+            object? rawStart = App.Current.Properties["StartDate"];
+            if (rawStart is string s)
+                startDate = DateTime.TryParse(s, out var parsed) ? parsed : DateTime.Now;
+            else
+                startDate = rawStart as DateTime? ?? DateTime.Now;
+
             validDays = (int)(App.Current.Properties["ValidDays"] ?? 0);
             grade = App.Current.Properties["Grade"] as string ?? "Free";
-            userId = App.Current.Properties["UserId"] as string ?? "unknown";
 
             UpdateMembershipText();
             StartMembershipTimer();
