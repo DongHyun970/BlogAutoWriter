@@ -2,8 +2,8 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using BlogAutoWriter.Services;
-using BlogAutoWriter.Views;
 using Timer = System.Timers.Timer;
 
 namespace BlogAutoWriter.Views
@@ -15,6 +15,8 @@ namespace BlogAutoWriter.Views
         private int validDays;
         private string grade = "Free";
         private string userId = "";
+
+        private bool settingsOpen = false;
 
         public MainView()
         {
@@ -85,8 +87,39 @@ namespace BlogAutoWriter.Views
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            new SettingsView().ShowDialog();
+            try
+            {
+                settingsOpen = !settingsOpen;
+                ToggleSettingsPanel(settingsOpen);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("설정 패널 열기 오류:\n" + ex.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
+
+        private void ToggleSettingsPanel(bool open)
+        {
+            double targetWidth = open ? 360 : 0;
+
+            var animation = new DoubleAnimation
+            {
+                To = targetWidth,
+                Duration = TimeSpan.FromMilliseconds(300),
+                AccelerationRatio = 0.2,
+                DecelerationRatio = 0.8
+            };
+
+            if (open)
+                SettingsPanel.Visibility = Visibility.Visible;
+            else
+                animation.Completed += (_, _) => SettingsPanel.Visibility = Visibility.Collapsed;
+
+            SettingsPanel.BeginAnimation(FrameworkElement.WidthProperty, animation); // ✅ 핵심 변경
+        }
+
+
 
         private async void GenerateButton_Click(object sender, RoutedEventArgs e)
         {

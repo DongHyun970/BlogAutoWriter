@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:BlogAutoWriter.Views"
         mc:Ignorable="d"
         Title="MainView" Height="600" Width="900"
         WindowStyle="None" AllowsTransparency="True"
@@ -11,62 +12,73 @@
 
     <Border Background="{StaticResource BackgroundBrush}" CornerRadius="14" Padding="20" BorderThickness="2" BorderBrush="#444">
         <Grid>
-            <!-- Title bar with membership info aligned center -->
-            <Grid VerticalAlignment="Top" Height="30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <!-- ✅ 슬라이드 설정 패널 구조 포함 -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" x:Name="SettingsColumn" />
+            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="📝 BlogAutoWriter Main" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+            <!-- 메인 UI -->
+            <Grid Grid.Column="0">
+                <Grid VerticalAlignment="Top" Height="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="UserInfoText" Grid.Column="1" FontSize="14" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                    <TextBlock Text="📝 BlogAutoWriter Main" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                    <TextBlock x:Name="UserInfoText" Grid.Column="1" FontSize="14" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right">
+                        <Button Content="⚙" Width="30" Height="30" Margin="0,0,5,0" Click="Settings_Click"
+                                Background="Transparent" Foreground="White" FontSize="14" BorderThickness="0" Cursor="Hand"/>
+                        <Button Content="×" Width="30" Height="30" Click="Close_Click"
+                                Background="Transparent" Foreground="White" FontSize="16" BorderThickness="0" Cursor="Hand"/>
+                    </StackPanel>
+                </Grid>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right">
-                    <Button Content="⚙" Width="30" Height="30" Margin="0,0,5,0" Click="Settings_Click"
-                            Background="Transparent" Foreground="White" FontSize="14" BorderThickness="0" Cursor="Hand"/>
-                    <Button Content="×" Width="30" Height="30" Click="Close_Click"
-                            Background="Transparent" Foreground="White" FontSize="16" BorderThickness="0" Cursor="Hand"/>
-                </StackPanel>
+                <Grid Margin="0,40,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 입력 패널 -->
+                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                        <TextBlock Text="블로그 키워드" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <TextBox x:Name="KeywordBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,20"/>
+
+                        <TextBlock Text="작성 스타일" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <ComboBox x:Name="StyleSelector" Height="35" SelectedIndex="0" Margin="0,0,0,20">
+                            <ComboBoxItem Content="일반 블로그"/>
+                            <ComboBoxItem Content="리뷰"/>
+                            <ComboBoxItem Content="에세이"/>
+                        </ComboBox>
+
+                        <TextBlock Text="블로그 로그인 방식" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <ComboBox x:Name="BlogLoginMethodComboBox" Height="35" SelectedIndex="0" Margin="0,0,0,20">
+                            <ComboBoxItem Content="카카오 로그인"/>
+                            <ComboBoxItem Content="티스토리 이메일 로그인"/>
+                        </ComboBox>
+
+                        <Button x:Name="GenerateButton" Style="{StaticResource RoundedButtonStyle}" Content="작성 요청" Click="GenerateButton_Click"/>
+                    </StackPanel>
+
+                    <!-- 미리보기 영역 -->
+                    <Border Grid.Column="1" Background="#3E3E55" CornerRadius="8" Padding="15">
+                        <ScrollViewer>
+                            <TextBlock x:Name="PreviewTextBlock"
+                                       Text="여기에 작성된 블로그 글이 출력됩니다."
+                                       Foreground="White" TextWrapping="Wrap" FontSize="14"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
             </Grid>
 
-            <Grid Margin="0,40,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- 입력 패널 -->
-                <StackPanel Grid.Column="0" Margin="0,0,20,0">
-                    <TextBlock Text="블로그 키워드" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
-                    <TextBox x:Name="KeywordBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,20"/>
-
-                    <TextBlock Text="작성 스타일" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
-                    <ComboBox x:Name="StyleSelector" Height="35" SelectedIndex="0" Margin="0,0,0,20">
-                        <ComboBoxItem Content="일반 블로그"/>
-                        <ComboBoxItem Content="리뷰"/>
-                        <ComboBoxItem Content="에세이"/>
-                    </ComboBox>
-
-                    <TextBlock Text="블로그 로그인 방식" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
-                    <ComboBox x:Name="BlogLoginMethodComboBox" Height="35" SelectedIndex="0" Margin="0,0,0,20">
-                        <ComboBoxItem Content="카카오 로그인"/>
-                        <ComboBoxItem Content="티스토리 이메일 로그인"/>
-                    </ComboBox>
-
-                    <Button x:Name="GenerateButton" Style="{StaticResource RoundedButtonStyle}" Content="작성 요청" Click="GenerateButton_Click"/>
-                </StackPanel>
-
-                <!-- 미리보기 영역 -->
-                <Border Grid.Column="1" Background="#3E3E55" CornerRadius="8" Padding="15">
-                    <ScrollViewer>
-                        <TextBlock x:Name="PreviewTextBlock"
-                                   Text="여기에 작성된 블로그 글이 출력됩니다."
-                                   Foreground="White" TextWrapping="Wrap" FontSize="14"/>
-                    </ScrollViewer>
-                </Border>
-            </Grid>
+            <!-- ⚙️ 슬라이드 설정 패널 -->
+            <Border Grid.Column="1" Background="#1e1e2f" x:Name="SettingsPanel"  Width="0" Padding="15" Visibility="Collapsed">
+                <views:SettingsView x:Name="SettingsViewControl" />
+            </Border>
         </Grid>
     </Border>
 </Window>

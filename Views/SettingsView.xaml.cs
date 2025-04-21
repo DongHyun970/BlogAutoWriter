@@ -2,10 +2,9 @@ using System.Windows;
 using BlogAutoWriter.Services;
 using System.Windows.Controls;
 
-
 namespace BlogAutoWriter.Views
 {
-    public partial class SettingsView : Window
+    public partial class SettingsView : UserControl
     {
         private string grade;
         private UserSettings settings;
@@ -63,10 +62,10 @@ namespace BlogAutoWriter.Views
             }
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
-        {
-            SaveSettingsFromUI();
-            this.Close();
-        }
+        // private void Close_Click(object sender, RoutedEventArgs e)
+        // {
+        //     SaveSettingsFromUI();
+        //     this.Visibility = Visibility.Collapsed; // ✅ 변경된 부분
+        // }
     }
 }
