@@ -1,37 +1,70 @@
 using System.Windows;
-using System.Windows.Controls;
-using BlogAutoWriter;
+using BlogAutoWriter.Services;
 
-namespace BlogAutoWriter
+namespace BlogAutoWriter.Views
 {
-    public partial class SettingsView : UserControl
+    public partial class SettingsView : Window
     {
+        private string grade;
+        private UserSettings settings;
+
         public SettingsView()
         {
             InitializeComponent();
+            grade = App.Current.Properties["Grade"] as string ?? "Free";
+            settings = SettingsManager.Load();
+
+            LoadSettingsToUI();
+            ApplyMembershipRestrictions();
         }
 
-        private void LoadBtn_Click(object sender, RoutedEventArgs e)
+        private void LoadSettingsToUI()
         {
-            AppSettings.Load();
-            OpenAiKeyBox.Text = AppSettings.Current.OpenAiApiKey;
-            KakaoEmailBox.Text = AppSettings.Current.KakaoEmail;
-            KakaoPasswordBox.Password = AppSettings.Current.KakaoPassword;
-            TistoryEmailBox.Text = AppSettings.Current.TistoryEmail;
-            TistoryPasswordBox.Password = AppSettings.Current.TistoryPassword;
-            CategoryBox.Text = string.Join(", ", AppSettings.Current.Categories);
+            ApiKeyBox.Text = settings.ApiKey;
+            KakaoIdBox.Text = settings.KakaoId;
+            KakaoPwBox.Password = settings.KakaoPassword;
+            CategoryBox.Text = settings.Category;
+            TemplateComboBox.SelectedIndex = settings.Template switch
+            {
+                "깨끗한 템플릿" => 0,
+                "모던 다크" => 1,
+                "컬러풀 블록형" => 2,
+                _ => 0
+            };
+            ImageUsageCheckBox.IsChecked = settings.UseImage;
         }
 
-        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        private void SaveSettingsFromUI()
         {
-            AppSettings.Current.OpenAiApiKey = OpenAiKeyBox.Text.Trim();
-            AppSettings.Current.KakaoEmail = KakaoEmailBox.Text.Trim();
-            AppSettings.Current.KakaoPassword = KakaoPasswordBox.Password.Trim();
-            AppSettings.Current.TistoryEmail = TistoryEmailBox.Text.Trim();
-            AppSettings.Current.TistoryPassword = TistoryPasswordBox.Password.Trim();
-            AppSettings.Current.Categories = CategoryBox.Text.Split(',');
+            settings.ApiKey = ApiKeyBox.Text.Trim();
+            settings.KakaoId = KakaoIdBox.Text.Trim();
+            settings.KakaoPassword = KakaoPwBox.Password.Trim();
+            settings.Category = CategoryBox.Text.Trim();
+            settings.Template = (TemplateComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
+            settings.UseImage = ImageUsageCheckBox.IsChecked == true;
 
-            AppSettings.Save();
+            SettingsManager.Save(settings);
+        }
+
+        private void ApplyMembershipRestrictions()
+        {
+            if (grade != "VIP" && grade != "VVIP")
+            {
+                TemplatePanel.IsEnabled = false;
+                TemplateComboBox.ToolTip = "VIP 이상 회원만 사용 가능합니다.";
+            }
+
+            if (grade != "VVIP")
+            {
+                ImageUsageCheckBox.IsEnabled = false;
+                ImageUsageCheckBox.ToolTip = "VVIP 회원 전용 기능입니다.";
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            SaveSettingsFromUI();
+            this.Close();
         }
     }
 }

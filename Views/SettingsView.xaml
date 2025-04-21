@@ -1,41 +1,39 @@
-<UserControl x:Class="BlogAutoWriter.SettingsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#292a2e">
+<Window x:Class="BlogAutoWriter.Views.SettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="설정" Height="420" Width="400"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
 
-    <Grid Margin="20">
-        <ScrollViewer VerticalScrollBarVisibility="Hidden">
-            <StackPanel>
+    <Border Background="{StaticResource BackgroundBrush}" CornerRadius="14" Padding="20" BorderThickness="2" BorderBrush="#444">
+        <StackPanel>
+            <DockPanel Margin="0,0,0,20">
+                <TextBlock Text="⚙ 설정" FontSize="18" FontWeight="Bold" Foreground="White" DockPanel.Dock="Left"/>
+                <Button Content="×" Width="30" Height="30" DockPanel.Dock="Right" Click="Close_Click"
+                        Background="Transparent" Foreground="White" FontSize="16" BorderThickness="0" Cursor="Hand"/>
+            </DockPanel>
 
-                <!-- OpenAI -->
-                <TextBlock Text=" OpenAI API Key" Foreground="White" FontWeight="Bold" Margin="0,12,0,4" FontSize="13"/>
-                <TextBox x:Name="OpenAiKeyBox" Height="30" Padding="6" FontSize="13" Background="White" BorderThickness="1" BorderBrush="Gray"/>
+            <TextBlock Text="OpenAPI Key" Foreground="White"/>
+            <TextBox x:Name="ApiKeyBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,10"/>
 
-                <!-- Kakao -->
-                <TextBlock Text=" 카카오 이메일" Foreground="White" FontWeight="Bold" Margin="0,12,0,4" FontSize="13"/>
-                <TextBox x:Name="KakaoEmailBox" Height="30" Padding="6" FontSize="13" Background="White" BorderThickness="1" BorderBrush="Gray"/>
+            <TextBlock Text="카카오 ID" Foreground="White"/>
+            <TextBox x:Name="KakaoIdBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,10"/>
 
-                <TextBlock Text=" 카카오 비밀번호" Foreground="White" FontWeight="Bold" Margin="0,12,0,4" FontSize="13"/>
-                <PasswordBox x:Name="KakaoPasswordBox" Height="30" Padding="6" FontSize="13" Background="White" BorderThickness="1" BorderBrush="Gray"/>
+            <TextBlock Text="카카오 비밀번호" Foreground="White"/>
+            <PasswordBox x:Name="KakaoPwBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,10"/>
 
-                <!-- Tistory -->
-                <TextBlock Text=" 티스토리 이메일" Foreground="White" FontWeight="Bold" Margin="0,12,0,4" FontSize="13"/>
-                <TextBox x:Name="TistoryEmailBox" Height="30" Padding="6" FontSize="13" Background="White" BorderThickness="1" BorderBrush="Gray"/>
+            <TextBlock Text="기본 카테고리" Foreground="White"/>
+            <TextBox x:Name="CategoryBox" Style="{StaticResource InputBoxStyle}" Margin="0,0,0,10"/>
 
-                <TextBlock Text=" 티스토리 비밀번호" Foreground="White" FontWeight="Bold" Margin="0,12,0,4" FontSize="13"/>
-                <PasswordBox x:Name="TistoryPasswordBox" Height="30" Padding="6" FontSize="13" Background="White" BorderThickness="1" BorderBrush="Gray"/>
-
-                <!-- Category -->
-                <TextBlock Text=" 카테고리 (쉼표로 구분)" Foreground="White" FontWeight="Bold" Margin="0,12,0,4" FontSize="13"/>
-                <TextBox x:Name="CategoryBox" Height="30" Padding="6" FontSize="13" Background="White" BorderThickness="1" BorderBrush="Gray"/>
-
-                <!-- 버튼 -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                    <Button Content="불러오기" x:Name="LoadBtn" Width="100" Height="32" Margin="0,0,10,0" Click="LoadBtn_Click"/>
-                    <Button Content="저장" x:Name="SaveBtn" Width="100" Height="32" Click="SaveBtn_Click"/>
-                </StackPanel>
-
+            <StackPanel x:Name="TemplatePanel" Margin="0,10,0,0">
+                <TextBlock Text="디자인 템플릿 선택 (VIP 전용)" Foreground="White"/>
+                <ComboBox x:Name="TemplateComboBox" Height="35" Margin="0,5,0,0">
+                    <ComboBoxItem Content="깨끗한 템플릿"/>
+                    <ComboBoxItem Content="모던 다크"/>
+                    <ComboBoxItem Content="컬러풀 블록형"/>
+                </ComboBox>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
-</UserControl>
+
+            <CheckBox x:Name="ImageUsageCheckBox" Content="이미지 자동삽입 (VVIP 전용)" Margin="0,10,0,0" Foreground="White"/>
+        </StackPanel>
+    </Border>
+</Window>

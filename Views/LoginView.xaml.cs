@@ -60,6 +60,11 @@ namespace BlogAutoWriter.Views
                     else if (File.Exists(SettingsFile))
                         File.Delete(SettingsFile);
 
+                    // ✅ 로그인 정보 App.Properties에 저장
+                    App.Current.Properties["StartDate"] = result.StartDate;
+                    App.Current.Properties["ValidDays"] = result.ValidDays;
+                    App.Current.Properties["Grade"] = result.Grade;
+
                     var main = new MainView();
                     main.Show();
                     this.Close();
