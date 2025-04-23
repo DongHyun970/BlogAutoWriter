@@ -79,6 +79,22 @@
             <Border Grid.Column="1" Background="#1e1e2f" x:Name="SettingsPanel"  Width="0" Padding="15" Visibility="Collapsed">
                 <views:SettingsView x:Name="SettingsViewControl" />
             </Border>
+
+            <!--디자인 템플릿 설정-->
+            <TextBlock Text="디자인 템플릿" FontSize="16" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+            <ComboBox x:Name="TemplateSelector" Height="35" SelectedIndex="0" Margin="0,0,0,20">
+                <ComboBoxItem Content="깨끗한 라이트" />
+                <ComboBoxItem Content="모던 다크" />
+                <ComboBoxItem Content="컬러풀 비비드" />
+            </ComboBox>
+            
+
+            <!--웹뷰-->
+            <Border Grid.Column="1" Background="#3E3E55" CornerRadius="8" Padding="15">
+                <WebBrowser x:Name="HtmlPreviewBrowser" />
+            </Border>
+
+
         </Grid>
     </Border>
 </Window>

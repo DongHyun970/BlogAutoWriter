@@ -158,5 +158,47 @@ namespace BlogAutoWriter.Views
                 PreviewTextBlock.Text = "글 생성 중 오류가 발생했습니다.\n" + ex.Message;
             }
         }
+
+
+        private string GetTemplateClass()
+        {
+            var selected = TemplateSelector.SelectedItem as ComboBoxItem;
+            var templateName = selected?.Content?.ToString() ?? "깨끗한 라이트";
+
+            return templateName switch
+            {
+                "깨끗한 라이트" => "baw-light",
+                "모던 다크" => "baw-dark",
+                "컬러풀 비비드" => "baw-vibrant",
+                _ => "baw-light"
+            };
+        }
+
+        private void RenderHtml(string html)
+        {
+            string htmlWrapper = $@"
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset='utf-8'>
+        <style>
+        body {{ margin: 0; padding: 0; }}
+        .baw-light {{ background: white; color: #222; font-family: 'Noto Sans KR'; padding: 20px; }}
+        .baw-dark {{ background: #222; color: #eee; font-family: 'Noto Sans KR'; padding: 20px; }}
+        .baw-vibrant {{ background: #f0f8ff; color: #333; font-family: 'Nanum Gothic'; padding: 20px; }}
+        .baw-section h2 {{ font-size: 20px; margin-top: 30px; }}
+        .baw-table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+        .baw-table th, .baw-table td {{ border: 1px solid #ccc; padding: 10px; }}
+        </style>
+        </head>
+        <body>
+        {html}
+        </body>
+        </html>";
+
+            HtmlPreviewBrowser.NavigateToString(htmlWrapper);
+        }
+
+
     }
 }
