@@ -1,44 +1,57 @@
 using System;
+using System.IO;
+using System.Text;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using BlogAutoWriter.Services;
-using Timer = System.Timers.Timer;
+using Microsoft.Web.WebView2.Core; // 꼭 추가
+
 
 namespace BlogAutoWriter.Views
 {
     public partial class MainView : Window
     {
-        private Timer? membershipTimer;
+        private System.Timers.Timer? membershipTimer;
+
         private DateTime? startDate;
         private int validDays;
         private string grade = "Free";
         private string userId = "";
-
         private bool settingsOpen = false;
 
         public MainView()
         {
             InitializeComponent();
             Loaded += MainView_Loaded;
+
+            // ✅ WebView2 자동 초기화
+            InitializeWebView();
         }
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
             userId = App.Current.Properties["UserId"] as string ?? "unknown";
-
-            object? rawStart = App.Current.Properties["StartDate"];
-            if (rawStart is string s)
-                startDate = DateTime.TryParse(s, out var parsed) ? parsed : DateTime.Now;
-            else
-                startDate = rawStart as DateTime? ?? DateTime.Now;
-
+            startDate = App.Current.Properties["StartDate"] as DateTime? ?? DateTime.Now;
             validDays = (int)(App.Current.Properties["ValidDays"] ?? 0);
             grade = App.Current.Properties["Grade"] as string ?? "Free";
 
             UpdateMembershipText();
             StartMembershipTimer();
+        }
+
+        private async void InitializeWebView()
+        {
+            try
+            {
+                await HtmlPreviewBrowser.EnsureCoreWebView2Async();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"WebView2 초기화 실패: {ex.Message}", "WebView2 오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void UpdateMembershipText()
@@ -49,17 +62,14 @@ namespace BlogAutoWriter.Views
 
         private void StartMembershipTimer()
         {
-            membershipTimer = new Timer(10000); // 10초마다 체크
+            membershipTimer = new System.Timers.Timer(10000);
             membershipTimer.Elapsed += CheckMembership;
             membershipTimer.Start();
         }
 
-        private void CheckMembership(object? sender, System.Timers.ElapsedEventArgs e)
+        private void CheckMembership(object? sender, ElapsedEventArgs e)
         {
-            var now = DateTime.Now;
-            var diff = (now - startDate!.Value).TotalDays;
-
-            if (diff > validDays)
+            if ((DateTime.Now - startDate!.Value).TotalDays > validDays)
             {
                 membershipTimer?.Stop();
                 Dispatcher.Invoke(() =>
@@ -77,12 +87,12 @@ namespace BlogAutoWriter.Views
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+                DragMove();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -98,7 +108,6 @@ namespace BlogAutoWriter.Views
             }
         }
 
-
         private void ToggleSettingsPanel(bool open)
         {
             double targetWidth = open ? 360 : 0;
@@ -112,53 +121,43 @@ namespace BlogAutoWriter.Views
             };
 
             if (open)
+            {
                 SettingsPanel.Visibility = Visibility.Visible;
+                HtmlPreviewBrowser.Visibility = Visibility.Collapsed; // 👉 WebView2 숨김
+            }
             else
-                animation.Completed += (_, _) => SettingsPanel.Visibility = Visibility.Collapsed;
+            {
+                animation.Completed += (_, _) =>
+                {
+                    SettingsPanel.Visibility = Visibility.Collapsed;
+                    HtmlPreviewBrowser.Visibility = Visibility.Visible; // 👉 다시 보이게
+                };
+            }
 
-            SettingsPanel.BeginAnimation(FrameworkElement.WidthProperty, animation); // ✅ 핵심 변경
+            SettingsPanel.BeginAnimation(FrameworkElement.WidthProperty, animation);
         }
-
 
 
         private async void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            string keyword = KeywordBox.Text.Trim();
-            var selected = StyleSelector.SelectedItem as ComboBoxItem;
-            string style = selected?.Content?.ToString() ?? "";
-
-            var loginItem = BlogLoginMethodComboBox.SelectedItem as ComboBoxItem;
-            string loginMethod = loginItem?.Content?.ToString() ?? "카카오 로그인";
-
-            if (string.IsNullOrWhiteSpace(keyword) || string.IsNullOrWhiteSpace(style))
-            {
-                MessageBox.Show("키워드와 스타일을 모두 입력해주세요.");
-                return;
-            }
-
-            PreviewTextBlock.Text = "GPT가 글을 생성 중입니다...";
-
             try
             {
-                string prompt = $"'{keyword}' 키워드로 {style} 스타일의 블로그 글을 작성해줘.";
-                string result = await GptService.GenerateBlogContentAsync(prompt);
-                PreviewTextBlock.Text = result;
+                string markdown = File.ReadAllText("SampleData/sample.txt", Encoding.UTF8);
 
-                if (loginMethod == "카카오 로그인")
-                {
-                    MessageBox.Show("카카오 로그인 자동화 경로로 이동합니다. (예정)");
-                }
-                else if (loginMethod == "티스토리 이메일 로그인")
-                {
-                    MessageBox.Show("티스토리 로그인 자동화 경로로 이동합니다. (예정)");
-                }
+                string htmlBody = MarkdownToHtmlConverter.Convert(markdown);
+                string templateClass = GetTemplateClass();
+                string fullHtml = $"<div class=\"{templateClass}\">{htmlBody}</div>";
+
+                Directory.CreateDirectory("SampleData");
+                File.WriteAllText("SampleData/result.html", fullHtml, Encoding.UTF8);
+
+                RenderHtml(fullHtml);
             }
             catch (Exception ex)
             {
-                PreviewTextBlock.Text = "글 생성 중 오류가 발생했습니다.\n" + ex.Message;
+                MessageBox.Show($"파일 처리 중 오류 발생: {ex.Message}", "에러", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
         private string GetTemplateClass()
         {
@@ -174,31 +173,39 @@ namespace BlogAutoWriter.Views
             };
         }
 
-        private void RenderHtml(string html)
+        private string GetCssFileNameByTemplate()
         {
-            string htmlWrapper = $@"
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <meta charset='utf-8'>
-        <style>
-        body {{ margin: 0; padding: 0; }}
-        .baw-light {{ background: white; color: #222; font-family: 'Noto Sans KR'; padding: 20px; }}
-        .baw-dark {{ background: #222; color: #eee; font-family: 'Noto Sans KR'; padding: 20px; }}
-        .baw-vibrant {{ background: #f0f8ff; color: #333; font-family: 'Nanum Gothic'; padding: 20px; }}
-        .baw-section h2 {{ font-size: 20px; margin-top: 30px; }}
-        .baw-table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
-        .baw-table th, .baw-table td {{ border: 1px solid #ccc; padding: 10px; }}
-        </style>
-        </head>
-        <body>
-        {html}
-        </body>
-        </html>";
+            var selected = TemplateSelector.SelectedItem as ComboBoxItem;
+            var name = selected?.Content?.ToString() ?? "깨끗한 라이트";
 
-            HtmlPreviewBrowser.NavigateToString(htmlWrapper);
+            return name switch
+            {
+                "깨끗한 라이트" => "clean.css",
+                "모던 다크" => "dark.css",
+                "컬러풀 비비드" => "vivid.css",
+                _ => "clean.css"
+            };
         }
 
+        private void RenderHtml(string html)
+        {
+            string cssFileName = GetCssFileNameByTemplate();
+            string cssPath = Path.Combine(Directory.GetCurrentDirectory(), "CSS", cssFileName);
+            string css = File.Exists(cssPath) ? File.ReadAllText(cssPath, Encoding.UTF8) : "";
 
+            string fullHtml = $@"
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset='utf-8'>
+                <style>{css}</style>
+            </head>
+            <body>
+                {html}
+            </body>
+            </html>";
+
+            HtmlPreviewBrowser.CoreWebView2?.NavigateToString(fullHtml);
+        }
     }
 }

@@ -1,0 +1,27 @@
+body {
+    background-color: #1e1e2f;
+    color: #eeeeee;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 20px;
+    line-height: 1.8;
+}
+
+.baw-section h2 {
+    font-size: 24px;
+    margin-top: 30px;
+    color: #90caf9;
+    border-bottom: 2px solid #444;
+    padding-bottom: 5px;
+}
+
+.baw-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.baw-table th, .baw-table td {
+    border: 1px solid #555555;
+    padding: 12px;
+    text-align: center;
+}
